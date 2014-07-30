@@ -24,9 +24,14 @@ window.matchMedia || (window.matchMedia = function() {
             matchMedium: function(media) {
                 var text = '@media ' + media + '{ #matchmediajs-test { width: 1px; } }';
 
-                // 'style.styleSheet' is used by IE <= 8 and 'style.textContent' for all other browsers
+                // 'style.styleSheet' breaks in by IE <= 8 and 'style.textContent' for all other browsers
                 if (style.styleSheet) {
+					// writing to 'style.styleSheet.cssText' breaks IE <=8
+                    if(/MSIE [6-8]/.test(navigator.userAgent)) {
+                        style.cssText = text;
+                    } else {
                     style.styleSheet.cssText = text;
+                    }
                 } else {
                     style.textContent = text;
                 }
